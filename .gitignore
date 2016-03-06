@@ -73,3 +73,6 @@ target/
 
 #Download Folder
 downloads/
+
+#MISC
+.DS_STORE
