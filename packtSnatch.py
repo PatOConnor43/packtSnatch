@@ -25,11 +25,17 @@ PASSWORD = args.password
 
 class MyAdapter(HTTPAdapter):
     def init_poolmanager(self, connections, maxsize, block=False):
+    	""" Supports the TLSv1 """
         self.poolmanager = PoolManager(num_pools=connections,
                                        maxsize=maxsize,
                                        block=block,
                                        ssl_version=ssl.PROTOCOL_TLSv1)
 def getBooklist(packt):
+	"""
+	Connects to my-ebooks page
+	pulls all of the titles in their library
+	Returns a dictionary with book title and id
+	"""
 	page = packt.get(base_url + 'account/my-ebooks')
 	soup = bs4(page.content, "html.parser")
 	books = soup.find_all('div', class_='product-line unseen')
@@ -37,6 +43,9 @@ def getBooklist(packt):
 	return book_list
 
 def downloadBook(packt, nid, value):
+	"""
+	Downloads ebook to pdf by book id number
+	"""
 	url = 'https://www.packtpub.com/ebook_download/' + nid + '/pdf'
 	name = value.replace('/', '-')
 	if os.path.isfile(os.path.join('downloads', name) + '.pdf'):
@@ -50,6 +59,11 @@ def downloadBook(packt, nid, value):
 		del response
 
 def getEbook(packt):
+	"""
+	Connects to Free Learning page
+	Collects eBook title, description and link
+	Orders the book if not already in users library
+	"""
 	print 'Getting book info from: ' + base_url + 'packt/offers/free-learning'
 	page = packt.get(base_url + 'packt/offers/free-learning')
 	soup = bs4(page.content, "html.parser")
@@ -57,10 +71,11 @@ def getEbook(packt):
 	book_img = soup.find('img', class_='bookimage imagecache imagecache-dotd_main_image')['src'][2:]
 	book_description = soup.find_all('div')[172].text.strip()
 	book_link = soup.find('a', class_='twelve-days-claim')['href'].strip()
-	print '----------------\nTitle: ' + book_title + '\nDescription: ' + book_description + '\nLink: ' + base_url + book_link[1:]
+	print '----------------\nTitle: ' + book_title + '\nDescription: ' + book_description + '\nLink: ' \
+		+ base_url + book_link[1:]
 
 	if book_link.split('/')[-2] in getBooklist(packt):
-		return ("You have already ordered this book")
+		return ("This book is already in your library")
 	else:
 		try:
 			packt.get(base_url + book_link)
@@ -69,6 +84,9 @@ def getEbook(packt):
 			return "Error Ordering EBook... :("
 
 def downloadEbooks(packt):
+	"""
+	Creates a downloads folders then downloads books to folder
+	"""
 	print 'Gathering book list for download...'
 	try:
 		os.makedirs(os.path.join(os.path.abspath('.'),'downloads'))
@@ -79,6 +97,10 @@ def downloadEbooks(packt):
 	return "All books have been downloaded"
 
 def main():
+	"""
+	Main function
+	Initiates requests session and performs auth post
+	"""
 	with requests.Session() as packt:
 		packt.mount('https://', MyAdapter())
 		packt.get(base_url)
