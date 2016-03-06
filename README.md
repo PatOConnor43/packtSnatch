@@ -9,9 +9,16 @@ This program will download and order ebooks from
 http://packtpub.com/packt/offers/free-learning
 
 optional arguments:
+
   -h, --help            show this help message and exit
+
+
   -u USERNAME, --username USERNAME
+
+
                         Username to log into Packtpub
+
+                        
   -p PASSWORD, --password PASSWORD
                         Password to log into Packtpub
   --get                 Gets the current free learning ebook download
