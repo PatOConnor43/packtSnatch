@@ -10,16 +10,22 @@ http://packtpub.com/packt/offers/free-learning
 
 optional arguments:
 
-  -h, --help            show this help message and exit
-
+  -h, --help
+  
+    show this help message and exit
 
   -u USERNAME, --username USERNAME
-
-
-                        Username to log into Packtpub
-
-                        
+  
+    Username to log into Packtpub
+    
   -p PASSWORD, --password PASSWORD
-                        Password to log into Packtpub
-  --get                 Gets the current free learning ebook download
-  --download            Downloads all of the ebooks you have in your account
+  
+    Password to log into Packtpub
+    
+  --get
+  
+    Gets the current free learning ebook download
+    
+  --download
+  
+    Downloads all of the ebooks you have in your account
